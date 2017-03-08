@@ -122,6 +122,12 @@ Now you can get your bearer token like this:
 
 `wsk action invoke --blocking --result ${WSK_NAMESPACE}/login --param username joshua.b.smith@us.ibm.com --param password ${MY_PASSWORD} |jq '.access_token'`
 
+## get user info
+
+`wsk action create ${WSK_NAMESPACE}/user_info user_info.js --main user_info --param namespace ${WSK_NAMESPACE}`
+
+`wsk action invoke --blocking --result /joshua.b.smith@us.ibm.com_testing/user_info --param token ${BEARER_TOKEN}`
+
 ---
 [1] this sets up two env vars for later
 

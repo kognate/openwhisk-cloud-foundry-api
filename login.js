@@ -24,8 +24,10 @@ var main = args => {
       request(request_options, (error, response, body) => {
       if (!error && response.statusCode == 200) {
 	resolve(JSON.parse(body));
+      } else if (response.statusCode === 401) {
+	resolve(JSON.parse(body));
       } else {
-	reject({error, response});
+	reject({error, body});
       }
     });
     });
