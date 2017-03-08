@@ -92,12 +92,35 @@ https://f597ede0-4d1a-4151-8c11-1058e7d3a9a4-gws.api-gw.mybluemix.net/e2e/v1/ser
 Now, drink mate.
 
 
+# Extra Information
+
+## Authentication and Bearer Tokens
+
+Cloud Foundry (CF) uses a seperate url for authentication.  If you wanted to get
+the bearer token for a given user and you have that username and password you can login
+directly.
+
+### Get the Authorization Endpoint
 
 
+First, create the action:
 
+`wsk action create ${WSK_NAMESPACE}/authorization_endpoint authorization_endpoint.js --main endpoint --param api_url ${API_URL}`
 
+Then you can call this action and get the `authorization_endpoint` key from the json returned.
 
+Once you have that URL, you can login and get your bearer token.  The code presented
+uses the [npm openwhisk module](https://www.npmjs.com/package/openwhisk) to call an action from
+inside another action.
 
+`wsk action create ${WSK_NAMESPACE}/login login.js --main main --params api_url ${API_URL}`
+
+This action calls the `authorization_endpoint` action to get the endpoint and then logs in using
+`username` and `password`
+
+Now you can get your bearer token like this:
+
+`wsk action invoke --blocking --result ${WSK_NAMESPACE}/login --param username joshua.b.smith@us.ibm.com --param password ${MY_PASSWORD} |jq '.access_token'`
 
 ---
 [1] this sets up two env vars for later
