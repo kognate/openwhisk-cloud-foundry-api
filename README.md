@@ -6,11 +6,12 @@ and it will install the correct one.
 You'll also need the `wsk` command line utilities installed.  You can get that package from
 `https://console.ng.bluemix.net/openwhisk/learn/cli`  for your platform.
 
-Once you've installed all that, you'll need to set an `env` variable for the `wsk` exmaples below.  You can do that by running the following in a terminal:
+Once you've installed all that, you'll need to set an `env` variable for the `wsk` exmaples below.  You can do that by running the following in a terminal[1]:
 
 ```
 eval $(cat ~/.cf/config.json |jq -crM '.AccessToken, .Target'  |awk '{if ($1 == "bearer") {print "export BEARER_TOKEN="$2} else { print "export API_URL=\""$1"\"" }}')
-``` [1]
+```
+
 
 # Creating the Actions
 
