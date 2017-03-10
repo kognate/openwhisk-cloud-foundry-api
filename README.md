@@ -61,7 +61,7 @@ https://f597ede0-4d1a-4151-8c11-1058e7d3a9a4-gws.api-gw.mybluemix.net/e2e/v1/ser
 |jq -c '.result[] | [.entity.extra.displayName, .metadata.guid]'
 ```
 
-Implement the pricing plan fetcher requires a similar sequence of actions. 
+Implement the pricing plan fetcher requires a similar sequence of actions.
 
 `wsk action create ${WSK_NAMESPACE}/service_plans_detail service_plans_detail.js --main service_plans_detail --param api_url ${API_URL}`
 
@@ -113,7 +113,7 @@ Once you have that URL, you can login and get your bearer token.  The code prese
 uses the [npm openwhisk module](https://www.npmjs.com/package/openwhisk) to call an action from
 inside another action.
 
-`wsk action create ${WSK_NAMESPACE}/login login.js --main main --params api_url ${API_URL}`
+`wsk action create ${WSK_NAMESPACE}/login login.js --main main --param api_url ${API_URL} --param namespace ${WSK_NAMESPACE}`
 
 This action calls the `authorization_endpoint` action to get the endpoint and then logs in using
 `username` and `password`
@@ -122,16 +122,24 @@ Now you can get your bearer token like this:
 
 `wsk action invoke --blocking --result ${WSK_NAMESPACE}/login --param username joshua.b.smith@us.ibm.com --param password ${MY_PASSWORD} |jq '.access_token'`
 
+Then we can add this via api-experimental.
+
+`wsk api-experimental create /e2e/v1 /login POST ${WSK_NAMESPACE}/login`
+
 ## get user info
 
-`wsk action create ${WSK_NAMESPACE}/user_info user_info.js --main user_info --param namespace ${WSK_NAMESPACE}`
+`wsk action create ${WSK_NAMESPACE}/user_info user_info.js --main user_info --param namespace ${WSK_NAMESPACE}` --param api_url ${API_URL}
 
 `wsk action invoke --blocking --result /joshua.b.smith@us.ibm.com_testing/user_info --param token ${BEARER_TOKEN}`
 
+`wsk api-experimental create /e2e/v1 /user_info POST ${WSK_NAMESPACE}/user_info`
+
+
+##  projects
+
+`wsk action update db_user_data db_user_data.js -P cloudant_default_params.json`
+`wsk action create db_create_project db_create_project.js -P cloudant_default_params.json`
+`wsk api-experimental create /e2e/v1 /projects GET db_user_data`
+`wsk api-experimental create /e2e/v1 /projects POST db_create_project.js`
 ---
 [1] this sets up two env vars for later
-
-
-
-
-
