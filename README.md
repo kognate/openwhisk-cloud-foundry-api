@@ -146,5 +146,12 @@ wsk action create ${WSK_NAMESPACE}/services_filter service_filter.js --main filt
 wsk action create ${WSK_NAMESPACE}/filter_services --sequence ${WSK_NAMESPACE}/services,${WSK_NAMESPACE}/services_filter
 wsk api-experimental create /e2e/v1 /filter_services GET ${WSK_NAMESPACE}/filter_services
 ```
+
+## apps
+
+```
+wsk action create ${WSK_NAMESPACE}/apps apps.js --main apps --param api_url ${API_URL}
+wsk api-experimental create /e2e/v1 /apps GET ${WSK_NAMESPACE}/apps
+```
 ---
 [1] this sets up two env vars for later
