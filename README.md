@@ -136,10 +136,15 @@ Then we can add this via api-experimental.
 
 
 ##  projects
+```
+wsk action create ${WSK_NAMESPACE}/db_user_data db_user_data.js -P cloudant_default_params.json
+wsk action create ${WSK_NAMESPACE}/db_create_project db_create_project.js -P cloudant_default_params.json
+wsk api-experimental create /e2e/v1 /projects GET ${WSK_NAMESPACE}/db_user_data
+wsk api-experimental create /e2e/v1 /projects POST ${WSK_NAMESPACE}/db_create_project
 
-`wsk action update db_user_data db_user_data.js -P cloudant_default_params.json`
-`wsk action create db_create_project db_create_project.js -P cloudant_default_params.json`
-`wsk api-experimental create /e2e/v1 /projects GET db_user_data`
-`wsk api-experimental create /e2e/v1 /projects POST db_create_project.js`
+wsk action create ${WSK_NAMESPACE}/services_filter service_filter.js --main filtered
+wsk action create ${WSK_NAMESPACE}/filter_services --sequence ${WSK_NAMESPACE}/services,${WSK_NAMESPACE}/services_filter
+wsk api-experimental create /e2e/v1 /filter_services GET ${WSK_NAMESPACE}/filter_services
+```
 ---
 [1] this sets up two env vars for later
