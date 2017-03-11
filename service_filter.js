@@ -5,6 +5,7 @@ var filtered = (args) => {
     return new Promise((resolve, reject) => {
         resolve({res: args.result.map((item) => { return { guid: item.metadata.guid,
              label: item.entity.label,
+             documentation: item.entity.extra.documentationUrl,
              name: item.entity.extra.displayName }})});
     });
 }
