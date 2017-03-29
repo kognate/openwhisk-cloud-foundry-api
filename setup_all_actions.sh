@@ -2,7 +2,7 @@
 
 eval $(cat ~/.cf/config.json |jq -crM '.AccessToken, .Target'  |awk '{if ($1 == "bearer") {print "export BEARER_TOKEN="$2} else { print "export API_URL=\""$1"\"" }}')
 
-export WSK_NAMESPACE='/WatsonPlatformServices_demos/bluemix'
+export WSK_NAMESPACE='/WatsonPlatformServices_console'
 
 wsk action create ${WSK_NAMESPACE}/services services.js --main services --param api_url ${API_URL}
 wsk api-experimental create /e2e/v1 /services POST ${WSK_NAMESPACE}/services
@@ -18,3 +18,6 @@ wsk api-experimental create /e2e/v1 /login POST ${WSK_NAMESPACE}/login --param n
 
 wsk action create ${WSK_NAMESPACE}/user_info user_info.js --main user_info --param namespace ${WSK_NAMESPACE} --param api_url ${API_URL}
 wsk api-experimental create /e2e/v1 /user_info POST ${WSK_NAMESPACE}/user_info
+
+wsk action create domain_guid domain_guid.js --main domain_guid --param api_url https://api.ng.bluemix.net
+wsk action create route_check route_check.js --main route_check --param api_url https://api.ng.bluemix.net

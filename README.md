@@ -153,5 +153,56 @@ wsk api-experimental create /e2e/v1 /filter_services GET ${WSK_NAMESPACE}/filter
 wsk action create ${WSK_NAMESPACE}/apps apps.js --main apps --param api_url ${API_URL}
 wsk api-experimental create /e2e/v1 /apps GET ${WSK_NAMESPACE}/apps
 ```
+
+## Route checking
+
+### Get domain guids
+
+```
+wsk action create domain_guid domain_guid.js --main domain_guid --param api_url https://api.ng.bluemix.net
+```
+
+Invoke it:
+
+```
+wsk action invoke --blocking --result domain_guid --param token $BEARER_TOKEN
+```
+
+Result:
+
+```
+{
+    "guids": [
+        {
+            "guid": "f4b90d7e-2cd3-4d30-b200-f28bbaf6be20",
+            "name": "mybluemix.net"
+        }
+    ]
+}
+```
+
+### Check if host route in domain is taken
+
+```
+wsk action create route_check route_check.js --main route_check --param api_url https://api.ng.bluemix.net
+```
+
+Invoke it:
+
+```
+$ wsk action invoke route_check --blocking --result --param token $BEARER_TOKEN \
+        --param host discovery-news \
+        --param domain_guid f4b90d7e-2cd3-4d30-b200-f28bbaf6be20
+```
+
+Result:
+
+```
+{
+    "status": "free"
+}
+```
+
+	
 ---
 [1] this sets up two env vars for later
