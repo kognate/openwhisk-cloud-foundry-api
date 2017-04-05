@@ -255,6 +255,22 @@ wsk action create create_service_instance create_service_instance.js --main crea
 
 Invoke It!
 
+you can get the space id and the plan id from `user_spaces_for_organizations` and `service_plans_detail`
 
+```
+wsk action invoke create_service_instance --blocking --result --param token $BEARER_TOKEN --param space_id $SPACE_ID --param plan_id $PLAN_ID --param name supergenius
+```
+
+### Delete a service instance (DANGEROUS!)
+
+```
+wsk action create delete_service_instance delete_service_instance.js --main delete_service_instance --param api_url https://api.ng.bluemix.net
+```
+
+Invoke it!
+
+```
+wsk action invoke delete_service_instance --blocking --result --param token $BEARER_TOKEN --param id $INSTANCE_ID
+```
 ---
 [1] this sets up two env vars for later
