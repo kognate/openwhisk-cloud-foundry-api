@@ -86,7 +86,7 @@ And you can call the created url much like the services url.
 curl -X POST -d "{ \"token\": \"${BEARER_TOKEN}\",  \
                    \"id\": \"8f89831e-5cc8-4fa8-9a2d-0e7989296f25\"}" \
 https://f597ede0-4d1a-4151-8c11-1058e7d3a9a4-gws.api-gw.mybluemix.net/e2e/v1/service_plans_detail \
-|jq '.result[] | [.entity.name, .entity.description]'
+|jq '.result[] | [.entity.name, .metadata.guid, .entity.description]'   
 ```
 
 Now, drink mate.
@@ -203,6 +203,58 @@ Result:
 }
 ```
 
-	
+
+### Get all Organizations and Spaces for the user
+
+#### Organizations
+```
+wsk action create user_organizations user_organizations.js --main user_organizations --param api_url https://api.ng.bluemix.net
+```
+
+Invoke it!
+
+```
+wsk action invoke user_organizations --blocking --result --param token $BEARER_TOKEN \
+|jq -c '.resources[] | [.entity.name, .metadata.guid]'
+```
+
+#### Spaces
+
+```
+wsk action create user_spaces_for_organizations user_spaces_for_organizations.js --main user_spaces_for_organizations --param api_url https://api.ng.bluemix.net
+```
+
+Invoke it!
+
+```
+wsk action invoke user_spaces_for_organization --blocking --result \
+--param token $BEARER_TOKEN \
+--param token id ${GUID}
+|jq -c '.resources[] | [.entity.name, .metadata.guid]'
+```
+
+### Service Instances
+
+#### Get all service Instances
+
+```
+wsk action create service_instances service_instances.js --main service_instances --param api_url https://api.ng.bluemix.net
+```
+
+Invoke it!
+
+```
+wsk action invoke service_instances --blocking --result --param token $BEARER_TOKEN |jq -c '.result[] | [.entity.name, .metadata.guid]'
+```
+
+#### Create a service instnace
+
+```
+wsk action create create_service_instance create_service_instance.js --main create_service_instance --param api_url https://api.ng.bluemix.net
+```
+
+Invoke It!
+
+
 ---
 [1] this sets up two env vars for later
